@@ -94,7 +94,10 @@ trait RuleAdminTrait
     {
         $list->add('rule.name')
             ->add('rule.active', 'boolean', ['editable' => true])
-            ->add('rule.expression', null, ['header_style' => 'width: 20%; text-align: center'])
             ->add('rule', null, ['template' => 'RuleEngineBundle:Admin:json_field.html.twig']);
+        // In dev environment, display the expression too.
+        if ($this->getConfigurationPool()->getContainer()->get('kernel.debug')) {
+            $list->add('rule.expression', null, ['header_style' => 'width: 20%; text-align: center']);
+        }
     }
 }
