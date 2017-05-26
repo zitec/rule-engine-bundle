@@ -1,6 +1,6 @@
 {
     "name": "zitec/rule-engine-bundle",
-    "type": "symfony-bundle"
+    "type": "symfony-bundle",
     "version": "1.0.0",
     "license": "MIT",
     "authors": [
@@ -15,11 +15,11 @@
     ],
     "require": {
         "php": ">=7.1",
-        "symfony/symfony": "~3.0",
+        "symfony/symfony": "~3.0"
     },
     "suggest": {
         "doctrine/orm": "For using Rule entities",
-        "sonata-project/doctrine-orm-admin-bundle": "For easy administration of the doctrine entities.",
+        "sonata-project/doctrine-orm-admin-bundle": "For easy administration of the doctrine entities."
     },
     "autoload": {
         "psr-4": { "Zitec\\RuleEngineBundle\\": "" }
