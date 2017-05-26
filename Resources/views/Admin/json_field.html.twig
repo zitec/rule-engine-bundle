@@ -1,0 +1,31 @@
+{% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
+
+{% block field %}
+    <div class="rule-engine-field">
+        {% macro recursiveRuleItem(item) %}
+            <li class="rule-type-{{ item.item_type }} {{ item.item_type == 'group' ? 'logic-' ~ item.data.logic_operator : '' }}">
+                {% if item.data.title is defined %}
+                    <span class="rule-group-title">{{ item.data.title }}</span>
+                {% endif %}
+                {% if item.data.items is defined and item.data.items|length %}
+                    <ul>
+                        {% for child in item.data.items %}
+                            {{ _self.recursiveRuleItem(child) }}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% if item.item_type == 'cond' %}
+                    <span class="rule-condition">{{ item.data }}</span>
+                {% endif %}
+            </li>
+        {% endmacro %}
+        {% set rule = admin.formatRule(object) %}
+        {% if rule is empty %}
+            No rules, always valid.
+        {% else %}
+            <ul>
+                {{ _self.recursiveRuleItem(rule) }}
+            </ul>
+        {% endif %}
+    </div>
+{% endblock %}

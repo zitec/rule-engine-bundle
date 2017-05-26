@@ -1,0 +1,43 @@
+services:
+    rules.admin:
+        class: RuleEngineBundle\Admin\RuleAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: "Rules", show_in_dashboard: false }
+        arguments:
+            - ~
+            - RuleEngineBundle\Entity\Rule
+            - ~
+
+    rules.doctrine_behaviors.rule:
+        class: RuleEngineBundle\DoctrineBehaviors\RuleSubscriber
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    rule_engine.form.type:
+        class: RuleEngineBundle\Form\Type\RuleEngineType
+        tags:
+            - {name: form.type}
+
+    rule_engine.autocomplete:
+        class: RuleEngineBundle\Autocomplete\AutocompleteManager
+
+    rule_engine.evaluator:
+        class: RuleEngineBundle\Service\RuleEvaluator
+
+    rule_engine.expression_array_functions:
+        class: RuleEngineBundle\Service\ArrayExpressionLanguageProvider
+        tags:
+            - { name: rule_engine.expression_function_provider }
+
+
+    rule_engine.condition.current_date:
+        class: RuleEngineBundle\Conditions\CurrentDate
+        public: false
+
+    rule_engine.condition.current_day:
+        class: RuleEngineBundle\Conditions\CurrentDay
+        public: false
+
+    rule_engine.condition.current_time:
+        class: RuleEngineBundle\Conditions\CurrentTime
+        public: false

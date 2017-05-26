@@ -1,0 +1,3 @@
+rule_engine_autocomplete:
+    path: /admin/rule-engine/autocomplete
+    defaults: { _controller: RuleEngineBundle:Default:autocomplete }

@@ -1,0 +1,6 @@
+RuleEngineBundle\Entity\Rule:
+    properties:
+        name:
+            - NotBlank: ~
+            - Length:
+                max: 100

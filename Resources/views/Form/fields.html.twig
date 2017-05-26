@@ -1,0 +1,100 @@
+{% block rule_engine_widget %}
+    {% spaceless %}
+        <script src="{{ asset('bundles/ruleengine/js/Utils/GuidGenerator.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('bundles/ruleengine/js/Utils/Class.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('bundles/ruleengine/js/Fields/BaseField.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('bundles/ruleengine/js/Fields/Interval.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('bundles/ruleengine/js/Fields/DateInterval.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('bundles/ruleengine/js/Fields/Select.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('bundles/ruleengine/js/Fields/Text.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('bundles/ruleengine/js/Fields/Date.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('bundles/ruleengine/js/Fields/Autocomplete.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('bundles/ruleengine/js/FieldsTypesFactory.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('bundles/ruleengine/js/Definitions/Operator.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('bundles/ruleengine/js/Definitions/Parameter.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('bundles/ruleengine/js/Definitions/Definitions.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('bundles/ruleengine/js/Condition.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('bundles/ruleengine/js/Group.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('bundles/ruleengine/js/RuleBuilder.js') }}" type="text/javascript"></script>
+        <link rel="stylesheet" href="{{ asset('bundles/ruleengine/css/routing_rules.css') }}"/>
+
+        {{ block('hidden_widget') }}
+
+        <div id="rule-engine-load">
+            <p>Paste the rule string in the box below and click Import.</p>
+            <input type="text"/>
+        </div>
+        <button type="button" class="btn btn-default" onclick="$('#rule-engine-load').dialog('open');">
+            Load rules
+        </button>
+
+        <button type="button" class="btn btn-default" onclick="copyRuleJsON();">
+            Copy rules to clipboard
+        </button>
+
+        <div id="rule_engine_rules" style="display: block;"></div>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var ruleEngineInput = $('.rule_engine_input');
+                var ruleEngineContainer = $('#rule_engine_rules');
+
+                // Init the rule engine.
+                var options = {
+                    fields: {{ condition_definitions|raw }},
+                    data: ruleEngineInput.val()
+                };
+                ruleEngineContainer.ruleBuilder(options);
+                ruleEngineContainer.closest('form').submit(function () {
+                    try {
+                        ruleEngineInput.val(JSON.stringify($('#rule_engine_rules').ruleBuilder('data')));
+                    } catch (e) {
+                        alert('There are errors in the rule conditions! Please fix them and resubmit.');
+                        return false;
+                    }
+                });
+                ruleEngineContainer.on('rule-change', ruleEngineContainer, function () {
+                    try {
+                        ruleEngineInput.val(JSON.stringify($('#rule_engine_rules').ruleBuilder('data')));
+                    } catch (e) {}
+                });
+
+                // Import function
+                $('#rule-engine-load').dialog({
+                    autoOpen: false,
+                    height: 200,
+                    width: 500,
+                    modal: true,
+                    buttons: {
+                        Import: function () {
+                            try {
+                                options.data = $('#rule-engine-load input').val();
+                                $('#rule_engine_rules').ruleBuilder(options);
+                            } catch (e) {
+                                alert('Invalid rule string!');
+                            }
+                            $(this).dialog("close");
+                        },
+                        Cancel: function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+                // Export function
+                function copyRuleJsON() {
+                    ruleEngineInput.val(JSON.stringify($('#rule_engine_rules').ruleBuilder('data')));
+                    ruleEngineInput.attr('type', 'text').select();
+                    try {
+                        if (!document.execCommand('copy')) {
+                            alert('Oops, unable to copy');
+                        }
+                    } catch (err) {
+                        alert('Oops, unable to copy');
+                    }
+                    ruleEngineInput.attr('type', 'hidden');
+                }
+            });
+        </script>
+
+    {% endspaceless %}
+{% endblock %}

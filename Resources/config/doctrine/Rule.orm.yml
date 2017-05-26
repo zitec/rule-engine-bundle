@@ -1,0 +1,24 @@
+RuleEngineBundle\Entity\Rule:
+    type: entity
+    table: rules
+    id:
+        id:
+            type: integer
+            column: id
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 100
+        active:
+            type: boolean
+            options:
+                default: '1'
+        expression:
+            type: text
+            nullable: false
+        json:
+            type: text
+            nullable: false
