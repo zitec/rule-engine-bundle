@@ -1,5 +1,5 @@
 {
-    "name": "RuleEngine",
+    "name": "zitec/rule-engine-bundle",
     "type": "symfony-bundle"
     "version": "1.0.0",
     "license": "MIT",
@@ -23,11 +23,5 @@
     },
     "autoload": {
         "psr-4": { "Zitec\\RuleEngineBundle\\": "" }
-    },
-    "target-dir": "Nelmio/ApiDocBundle",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.13-dev"
-        }
     }
 }
