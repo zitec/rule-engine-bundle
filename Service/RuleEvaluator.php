@@ -11,7 +11,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
  * Class RuleEvaluator
  * Rule expression evaluator that uses the ExpressionLanguage service to evaluate rules.
  */
-class RuleEvaluator
+class RuleEvaluator implements RuleEvaluatorInterface
 {
     /**
      * @var ExpressionLanguage

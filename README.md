@@ -9,7 +9,7 @@ You can install it through composer.
 ```
  { 
    "require":{
-       "zitec/rule-engine": "v1.0.0"
+       "zitec/rule-engine-bundle": "v1.0.0"
     }
   }  
 ```
@@ -146,9 +146,25 @@ class EmailAddress implements RuleInterface
 }
 ```
 
-Update the doctrine schema and notice the brand new relation with the Rule entity that will hold the expressions for your EmailAddress entity. 
+Update the doctrine schema and notice the brand new relation with the Rule entity that will hold the expressions for your EmailAddress entity.
 
-Onwards to the admin section. I will assume that you are using SonataAdmin to manage your doctrine entity. If so, this is what you need to do:
+Your rule-integrated entity will need to be associated with a context and conditions set, i.e. a rule conditions manager. To do that, you have to add a tag to the conditions manager service declaration. The service above becomes:
+```
+my_bundle.rule_engine.manager.my_object:
+    class: Zitec\RuleEngineBundle\Service\RuleConditionsManager
+    arguments: ['@my_bundle.rule_engine.context.my_first_context']
+    calls:
+        - [addSupportedCondition, ["@rule_engine.condition.current_date"]]
+        - [addSupportedCondition, ["@rule_engine.condition.current_day"]]
+        - [addSupportedCondition, ["@rule_engine.condition.current_time"]]
+        - [addSupportedCondition, ["@my_bundle.rule_engine.condition.my_parameter"]]
+    tags:
+        - { name: rule_engine.conditions_manager, entity: "MyBundle:EmailAddress" }
+```
+
+Onwards to the admin section.
+
+I will assume that you are using SonataAdmin to manage your doctrine entity. If so, this is what you need to do:
 
 In the Admin class, add a "use RuleAdminTrait" statement, and use the relevant methods:
 
@@ -170,21 +186,6 @@ class EmailAddressAdmin extends AbstractAdmin
         $this->addRuleListColumns($list);
         // Add the rest of your columns and actions.
     }
-```
-In the service declaration for your admin, add a "setRuleManager" call using the rule manager service you defined in the step above:
-
-```
-my_bundle.email_address.admin:
-    class: MyBundle\Admin\EmailAddressAdmin
-    arguments:
-        - ~
-        - MyBundle\Entity\EmailAddress
-        - ~
-    calls:
-        - [setRuleManager, ["@my_bundle.rule_engine.manager.my_object"]]
-    tags:
-        - {name: sonata.admin, manager_type: orm, label: "Email addresses"}
-
 ```
 
 Congratulations! You can now see it in action and set addresses for various cases, using complex rules!
@@ -311,4 +312,9 @@ my_bundle.rule_engine.autocomplete.my_autocomplete:
 
 The value for the key is what you have to use in the fieldOptions for the autocomplete type.
 
-
+Don't forget to add the routing info in the routing.yml file of your app:
+```
+rule_engine:
+    resource: "@ZitecRuleEngineBundle/Resources/config/routing.yml"
+    prefix:   /
+```

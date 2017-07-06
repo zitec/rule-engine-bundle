@@ -1,4 +1,4 @@
-RuleEngineBundle\Entity\Rule:
+Zitec\RuleEngineBundle\Entity\Rule:
     properties:
         name:
             - NotBlank: ~

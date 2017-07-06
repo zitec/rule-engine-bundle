@@ -2,9 +2,11 @@
 
 namespace Zitec\RuleEngineBundle;
 
-use Zitec\RuleEngineBundle\DependencyInjection\Compiler\RuleEnginePass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Zitec\RuleEngineBundle\DependencyInjection\Compiler\AutocompletePass;
+use Zitec\RuleEngineBundle\DependencyInjection\Compiler\ConditionsManagerPass;
+use Zitec\RuleEngineBundle\DependencyInjection\Compiler\ExpressionProviderPass;
 
 /**
  * Class RuleEngineBundle
@@ -16,7 +18,9 @@ class ZitecRuleEngineBundle extends Bundle
      */
     public function build(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new RuleEnginePass());
+        $container->addCompilerPass(new AutocompletePass());
+        $container->addCompilerPass(new ExpressionProviderPass());
+        $container->addCompilerPass(new ConditionsManagerPass());
         parent::build($container);
     }
 }

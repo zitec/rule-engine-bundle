@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 /**
  * The bundle container extension.
  */
-class RuleEngineExtension extends Extension
+class ZitecRuleEngineExtension extends Extension
 {
     /**
      * {@inheritdoc}

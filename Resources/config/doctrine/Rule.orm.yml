@@ -1,4 +1,4 @@
-RuleEngineBundle\Entity\Rule:
+Zitec\RuleEngineBundle\Entity\Rule:
     type: entity
     table: rules
     id:
