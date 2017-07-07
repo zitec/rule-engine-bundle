@@ -51,7 +51,7 @@ class Orchestrator
     {
         $entityClassName = get_class($entity);
         if (!isset($this->conditionsManagers[$entityClassName])) {
-            throw new \InvalidArgumentException(sprintf('No conditions manager defined for entity %s', $entityName));
+            throw new \InvalidArgumentException(sprintf('No conditions manager defined for entity %s', $entityClassName));
         }
 
         return $this->conditionsManagers[$entityClassName];

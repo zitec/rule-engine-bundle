@@ -1,8 +1,10 @@
 {% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
 
 {% block field %}
+    {% import _self as recursive %}
     <div class="rule-engine-field">
-        {% macro recursiveRuleItem(item) %}
+        {% macro formatRuleItem(item) %}
+            {% import _self as recursive %}
             <li class="rule-type-{{ item.item_type }} {{ item.item_type == 'group' ? 'logic-' ~ item.data.logic_operator : '' }}">
                 {% if item.data.title is defined %}
                     <span class="rule-group-title">{{ item.data.title }}</span>
@@ -10,7 +12,7 @@
                 {% if item.data.items is defined and item.data.items|length %}
                     <ul>
                         {% for child in item.data.items %}
-                            {{ _self.recursiveRuleItem(child) }}
+                            {{ recursive.formatRuleItem(child) }}
                         {% endfor %}
                     </ul>
                 {% endif %}
@@ -24,7 +26,7 @@
             No rules, always valid.
         {% else %}
             <ul>
-                {{ _self.recursiveRuleItem(rule) }}
+                {{ recursive.formatRuleItem(rule) }}
             </ul>
         {% endif %}
     </div>
