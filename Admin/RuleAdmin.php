@@ -18,7 +18,7 @@ class RuleAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $fieldOptions = ['label' => false, 'template' => 'ZitecRuleEngineBundle:Form:fields.html.twig'];
+        $fieldOptions = ['label' => false];
         $parentOptions = $this->getParentFieldDescription()->getOptions();
         if (!isset($parentOptions['rule_manager'])) {
             throw new \RuntimeException('Missing rule manager object!');

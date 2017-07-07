@@ -14,6 +14,15 @@ use Sonata\AdminBundle\Form\FormMapper;
  */
 trait RuleAdminTrait
 {
+    /**
+     * Set the form theme to include the RuleEngine field template.
+     *
+     * @return array
+     */
+    public function getFormTheme()
+    {
+        return array_merge(parent::getFormTheme(), ['ZitecRuleEngineBundle:Form:rule_engine.html.twig']);
+    }
 
     /**
      * @param RuleInterface $subject

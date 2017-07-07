@@ -19,8 +19,8 @@ class RuleEngineType extends HiddenType
 
     const PREFIX = 'rule_engine';
 
-    protected $conditionFields = ['name', 'label', 'description', 'operators'];
-    protected $operatorFields = ['name', 'label', 'fieldType', 'fieldOptions'];
+    protected $conditionFields = ['name' => '', 'label' => '', 'description' => '', 'operators' => ''];
+    protected $operatorFields = ['name' => '', 'label' => '', 'fieldType' => '', 'fieldOptions' => ''];
 
     /**
      * @return string
@@ -60,21 +60,9 @@ class RuleEngineType extends HiddenType
         $definitions = [];
         foreach ($ruleManager->getSupportedConditions() as $condition) {
             $definition = $condition->getDefinitions();
-            foreach ($definition as $key => $value) {
-                if (!in_array($key, $this->conditionFields)) {
-                    unset($definition[$key]);
-                }
-                if ($key === 'operators') {
-                    foreach ($definition[$key] as &$operator) {
-                        foreach (array_keys($operator) as $opKey) {
-                            if (!in_array($opKey, $this->operatorFields)) {
-                                unset($operator[$opKey]);
-                            }
-                        }
-                    }
-                }
-            }
-            $definitions[] = $definition;
+            $filtered = array_intersect_key($definition, $this->conditionFields);
+            $filtered['operators'] = array_intersect_key($filtered['operators'], $this->operatorFields);
+            $definitions[] = $filtered;
         }
         $view->vars['condition_definitions'] = json_encode($definitions);
         parent::buildView($view, $form, $options);
