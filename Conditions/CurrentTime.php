@@ -34,6 +34,8 @@ class CurrentTime extends AbstractValueCondition
                     'datetimepicker' => [
                         'pickDate' => false,
                         'pickTime' => true,
+                        'pick12HourFormat' => true,
+                        'format' => 'HH:mm',
                     ],
                 ],
                 'value_transform' => function ($val) {

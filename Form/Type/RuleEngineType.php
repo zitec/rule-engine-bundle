@@ -61,7 +61,9 @@ class RuleEngineType extends HiddenType
         foreach ($ruleManager->getSupportedConditions() as $condition) {
             $definition = $condition->getDefinitions();
             $filtered = array_intersect_key($definition, $this->conditionFields);
-            $filtered['operators'] = array_intersect_key($filtered['operators'], $this->operatorFields);
+            array_walk($filtered['operators'], function(&$value) {
+                $value = array_intersect_key($value, $this->operatorFields);
+            });
             $definitions[] = $filtered;
         }
         $view->vars['condition_definitions'] = json_encode($definitions);

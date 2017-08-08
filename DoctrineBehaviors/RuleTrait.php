@@ -72,6 +72,14 @@ trait RuleTrait
      */
     public function __toString()
     {
-        return $this->getRule()->getName();
+        $rule = $this->getRule();
+        if ($rule instanceof Rule) {
+            $name = $rule->getName();
+            if (isset($name)){
+                return $name;
+            }
+        }
+
+        return "New rule";
     }
 }

@@ -48,7 +48,7 @@ class CurrentDate extends AbstractValueCondition
                 'fieldType'       => 'datetime_interval',
                 'value_transform' => function ($val) {
                     return isset($val['from']) && isset($val['to']) ?
-                        ['from' => strtotime($val['from']), 'to' => strtotime($val['to'])] : null;
+                        ['from' => strtotime($val['from']), 'to' => strtotime($val['to'] . ' 23:59:59')] : null;
                 },
             ],
         ];

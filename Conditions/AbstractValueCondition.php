@@ -148,15 +148,15 @@ abstract class AbstractValueCondition implements ConditionInterface
                 $start = $value['from'];
                 $end = $value['to'];
 
-                return "$parameterName in $start..$end";
+                return "$parameterName >= $start and $parameterName <= $end";
             case $this::EQUALS:
                 return "$parameterName == $value";
             case $this::GREATER:
                 return "$parameterName > $value";
             case $this::SMALLER:
-                return "$parameterName <>> $value";
+                return "$parameterName < $value";
             case $this::EQUALS_PARAM:
-                return "$parameterName == $variableName.$value";
+                return "$parameterName == $value";
         }
 
         throw new \DomainException(sprintf('Unrecognized operator %s', $operator));

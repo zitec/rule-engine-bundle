@@ -6,6 +6,7 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Zitec\RuleEngineBundle\Entity\Rule;
 
 /**
@@ -40,6 +41,7 @@ class RuleSubscriber implements EventSubscriber
                 $classMetadata->mapOneToOne(
                     [
                         'targetEntity'  => Rule::class,
+                        'fetch'         => ClassMetadataInfo::FETCH_EAGER,
                         'fieldName'     => 'rule',
                         'cascade'       => ['persist', 'remove'],
                         'orphanRemoval' => true,
