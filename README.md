@@ -6,7 +6,7 @@ A demo site?
 ## Installation
 
 You can install it through composer.
-```
+```json
  { 
    "require":{
        "zitec/rule-engine-bundle": "v1.0.0"
@@ -21,7 +21,7 @@ You can install it through composer.
 
 Write a class implementing RuleContextInterface, and add some methods that will return the parameters you wish to include in your rules. To make things super-easy, a basic context class already exists: ContextBase. It already offers getters for 3 parameters: current_date, current_day, and current_time. Your custom context can extend this.
    
-```
+```php
 namespace MyBundle/RuleEngine/Context;
 
 use Zitec/RuleEngineBundle/Service/ContextBase;
@@ -56,7 +56,7 @@ class MyFirstContext extends ContextBase
 For each parameter (method) in the context object, create a Condition object. The condition services for the three date.time parameters supported by the ContextBase class are already defined in the rule engine bundle. We'll add another one in our new bundle for the added parameter (my_parameter).
 We can write a condition from scratch, but it's much easier to extend one of the two Abstract condition classes that offer support for basic operators for single-value and array parameters. If "my_parameter" is in fact an array, we can do somthing like this:
   
-```
+```php
 namespace MyBundle/RuleEngine/Conditions;
 
 use Zitec/RuleEngineBundle/Conditions/AbstractArrayCondition;
@@ -111,7 +111,7 @@ Now that we have our context object and the matching definitions, let's create a
  We need to give it your context object as argument and the conditions as ‘addSupportedCondition’ calls. Since we extended the ContextBase class, we can use the datetime conditions defined by rule engine too.
  Below is an example of services defined using the classes above.
  
-```
+```yaml
 my_bundle.rule_engine.context.my_first_context:
     class: MyBundle\RuleEngine\Context\MyFirstContext
     shared: false
@@ -137,7 +137,7 @@ Now we need to use the context and conditions to render the front end conditions
 But in most probability, the actions you want to associate with the rules need some data of their own. For instance, we could decide to send emails to various addresses based on the parameters in our object. In that case, we can define a doctrine entity with an email field, to define the addresses, and set it as a rule entity.
 Doing that is very simple: just add "implements RuleInterface" to your class, and add a "use RuleTrait" statement to actually implement the interface.
 
-```
+```php
 class EmailAddress implements RuleInterface
 {
     use RuleTrait;
@@ -149,7 +149,7 @@ class EmailAddress implements RuleInterface
 Update the doctrine schema and notice the brand new relation with the Rule entity that will hold the expressions for your EmailAddress entity.
 
 Your rule-integrated entity will need to be associated with a context and conditions set, i.e. a rule conditions manager. To do that, you have to add a tag to the conditions manager service declaration. The service above becomes:
-```
+```yaml
 my_bundle.rule_engine.manager.my_object:
     class: Zitec\RuleEngineBundle\Service\RuleConditionsManager
     arguments: ['@my_bundle.rule_engine.context.my_first_context']
@@ -168,7 +168,7 @@ I will assume that you are using SonataAdmin to manage your doctrine entity. If 
 
 In the Admin class, add a "use RuleAdminTrait" statement, and use the relevant methods:
 
-```
+```php
 class EmailAddressAdmin extends AbstractAdmin
 {
     use RuleAdminTrait;
@@ -194,7 +194,7 @@ Congratulations! You can now see it in action and set addresses for various case
 
 Somewhere in your business flow you will need to extract the email address(es) that match your object. The code for that will use the RuleEvaluator service and could look something like this:
 
-```
+```php
 use Doctrine\ORM\EntityRepository;
 use MyBundle\RuleEngine\Context\MyFirstContext;
 use Zitec\RuleEngineBundle\Service\RuleEvaluator;
@@ -277,7 +277,7 @@ An operator is an array with these keys:
 In order to use an autocomplete field, you need to define a data source by implementing the Zitec\RuleEngineBundle\Autocomplete\AutocompleteInterface.
 If you want to have an autocomplete of doctrine entities, you can extend the AbstractAutocompleteEntity class:
 
-```
+```php
 use MyBundle\Entity\MyEntity;
 use Zitec\RuleEngineBundle\Autocomplete\AbstractAutocompleteEntity;
 
@@ -302,7 +302,7 @@ class MyEntityAutocomplete extends AbstractAutocompleteEntity
 
 and declare the service using a "rule_engine.autocomplete.data_source" tag:
 
-```
+```yaml
 my_bundle.rule_engine.autocomplete.my_autocomplete:
     class: MyBundle\RuleEngine\Autocomplete\MyEntityAutocomplete
     arguments: ["@doctrine.orm.default_entity_manager"]
@@ -313,7 +313,7 @@ my_bundle.rule_engine.autocomplete.my_autocomplete:
 The value for the key is what you have to use in the fieldOptions for the autocomplete type.
 
 Don't forget to add the routing info in the routing.yml file of your app:
-```
+```yaml
 rule_engine:
     resource: "@ZitecRuleEngineBundle/Resources/config/routing.yml"
     prefix:   /
