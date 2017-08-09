@@ -9,7 +9,7 @@ You can install it through composer.
 ```json
  { 
    "require":{
-       "zitec/rule-engine-bundle": "v1.0.0"
+       "zitec/rule-engine-bundle": "~1.0"
     }
   }  
 ```
