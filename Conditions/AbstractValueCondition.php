@@ -150,7 +150,7 @@ abstract class AbstractValueCondition implements ConditionInterface
 
                 return "$parameterName >= $start and $parameterName <= $end";
             case $this::EQUALS:
-                return "$parameterName == $value";
+                return "$parameterName == '$value'";
             case $this::GREATER:
                 return "$parameterName > $value";
             case $this::SMALLER:
